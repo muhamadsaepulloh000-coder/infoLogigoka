@@ -1,0 +1,752 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>InfoLogika — News & Logic Portal</title>
+
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Plus+Jakarta+Sans:wght@500;600;700;800&display=swap" rel="stylesheet">
+
+    <link rel="stylesheet" href="style.css">
+</head>
+
+<body>
+
+<!-- =========================
+     NAVBAR
+========================= -->
+
+<header class="navbar">
+
+    <div class="nav-inner">
+        <a href="#" class="brand" onclick="showPage('home'); return false;">
+            <div class="brand-mark">IL</div>
+            <div class="brand-text">
+                <strong>InfoLogika</strong>
+                <span data-i18n="brand.tagline">News &amp; Logic Journal</span>
+            </div>
+        </a>
+
+        <nav class="nav-menu">
+
+            <button onclick="showPage('home')" class="nav-link active">
+                <span data-i18n="nav.home">Home</span>
+            </button>
+
+            <button onclick="showPage('submit')" class="nav-link">
+                <span data-i18n="nav.submit">Submit news</span>
+            </button>
+
+            <button onclick="showPage('stories')" class="nav-link">
+                <span data-i18n="nav.stories">Folk stories</span>
+            </button>
+
+            <button onclick="showPage('admin')" class="nav-link" hidden>
+                <span data-i18n="nav.admin">Admin</span>
+            </button>
+
+        </nav>
+
+        <button class="language-toggle" id="language-toggle" type="button" onclick="toggleLanguage()" aria-label="Change language">
+            <span aria-hidden="true">文</span>
+            <span id="language-toggle-label">Bahasa Indonesia</span>
+        </button>
+
+        <button class="theme-toggle" id="theme-toggle" type="button" onclick="toggleTheme()" aria-label="Switch to dark mode">
+            <span aria-hidden="true">☾</span>
+            <span class="theme-toggle-label" data-i18n="theme.dark">Dark mode</span>
+        </button>
+
+        <div class="account-controls">
+            <span id="account-name" class="account-name" hidden></span>
+            <button class="account-button" id="account-button" type="button" onclick="handleAccountButton()">
+                <span data-i18n="auth.signIn">Sign in</span>
+            </button>
+            <button class="account-button" id="logout-button" type="button" onclick="logoutUser()" hidden>
+                <span data-i18n="auth.signOut">Sign out</span>
+            </button>
+        </div>
+
+        <button class="mobile-menu-btn" onclick="toggleMobileMenu()">
+            ☰
+        </button>
+
+    </div>
+
+</header>
+
+
+<!-- =========================
+     MAIN
+========================= -->
+
+<main>
+
+
+<!-- =========================
+     HOME
+========================= -->
+
+<section id="page-home" class="page active-page">
+
+    <div class="hero">
+
+        <div class="hero-content">
+
+            <div class="eyebrow">
+                <span data-i18n="home.eyebrow">LOGIC &amp; INFORMATICS</span>
+            </div>
+
+            <h1>
+                <span data-i18n="home.titleFirst">Read the news.</span><br>
+                <span data-i18n="home.titleSecond">Analyze the logic.</span>
+            </h1>
+
+            <p>
+                <span data-i18n="home.intro">InfoLogika turns news and stories into lessons on propositions, implications, quantifiers, and truth tables.</span>
+            </p>
+
+            <div class="hero-actions">
+
+                <button class="btn btn-primary"
+                        onclick="showPage('submit')">
+                    <span data-i18n="nav.submit">Submit news</span>
+                </button>
+
+                <button class="btn btn-secondary"
+                        onclick="scrollToNews()">
+                    <span data-i18n="home.explore">Explore news</span>
+                </button>
+
+            </div>
+
+        </div>
+
+        <div class="hero-visual">
+
+            <div class="logic-card">
+
+                <div class="logic-header">
+                    <span data-i18n="home.logicLabel">LOGIC ANALYSIS</span>
+                    <span class="live-dot"></span>
+                </div>
+
+                <div class="logic-expression">
+                    P <span>→</span> Q
+                </div>
+
+                <div class="logic-description">
+                    <span data-i18n="home.implication">If P is true, then Q is true</span>
+                </div>
+
+                <div class="logic-mini-table">
+
+                    <div class="logic-row head">
+                        <span>P</span>
+                        <span>Q</span>
+                        <span>P → Q</span>
+                    </div>
+
+                    <div class="logic-row">
+                        <span data-i18n="logic.true">True</span>
+                        <span data-i18n="logic.true">True</span>
+                        <span class="true" data-i18n="logic.true">True</span>
+                    </div>
+
+                    <div class="logic-row">
+                        <span data-i18n="logic.true">True</span>
+                        <span data-i18n="logic.false">False</span>
+                        <span class="false" data-i18n="logic.false">False</span>
+                    </div>
+
+                    <div class="logic-row">
+                        <span data-i18n="logic.false">False</span>
+                        <span data-i18n="logic.true">True</span>
+                        <span class="true" data-i18n="logic.true">True</span>
+                    </div>
+
+                    <div class="logic-row">
+                        <span data-i18n="logic.false">False</span>
+                        <span data-i18n="logic.false">False</span>
+                        <span class="true" data-i18n="logic.true">True</span>
+                    </div>
+
+                </div>
+
+            </div>
+
+        </div>
+
+    </div>
+
+
+    <!-- NEWS -->
+
+    <section class="content-section" id="news-section">
+
+        <div class="section-heading">
+
+            <div>
+                <span class="section-label">
+                    <span data-i18n="home.latest">LATEST</span>
+                </span>
+
+                <h2>
+                    <span data-i18n="home.featured">Featured stories</span>
+                </h2>
+            </div>
+
+            <button class="text-btn"
+                    onclick="showPage('submit')">
+                <span data-i18n="home.addStory">+ Submit a story</span>
+            </button>
+
+        </div>
+
+        <div id="news-grid" class="news-grid"></div>
+
+    </section>
+
+</section>
+
+
+
+<!-- =========================
+     STORIES
+========================= -->
+
+<section id="page-stories" class="page">
+
+    <div class="page-header">
+
+        <div>
+            <span class="section-label">
+                <span data-i18n="stories.eyebrow">LITERACY</span>
+            </span>
+
+            <h1>
+                <span data-i18n="nav.stories">Folk stories</span>
+            </h1>
+
+            <p>
+                <span data-i18n="stories.intro">Folk stories explored through the concepts of propositional logic.</span>
+            </p>
+        </div>
+
+    </div>
+
+    <div id="stories-grid" class="news-grid"></div>
+
+</section>
+
+
+
+<!-- =========================
+     SUBMIT
+========================= -->
+
+<section id="page-submit" class="page">
+
+    <div class="form-page">
+
+        <div class="form-intro">
+
+            <span class="section-label">
+                <span data-i18n="submit.eyebrow">CONTRIBUTE</span>
+            </span>
+
+            <h1>
+                <span data-i18n="submit.title">Submit a story</span>
+            </h1>
+
+            <p>
+                <span data-i18n="submit.intro">Share a news story for learning and analysis. Every submission is reviewed before publication.</span>
+            </p>
+
+            <div class="submission-info">
+
+                <div class="info-item">
+                    <strong>01</strong>
+                    <span data-i18n="submit.step1">Enter contributor details</span>
+                </div>
+
+                <div class="info-item">
+                    <strong>02</strong>
+                    <span data-i18n="submit.step2">Write the story and propositions</span>
+                </div>
+
+                <div class="info-item">
+                    <strong>03</strong>
+                    <span data-i18n="submit.step3">A reviewer checks the submission</span>
+                </div>
+
+                <div class="info-item">
+                    <strong>04</strong>
+                    <span data-i18n="submit.step4">Logic analysis is generated automatically</span>
+                </div>
+
+            </div>
+
+        </div>
+
+
+        <form id="submit-form" class="submission-form">
+
+            <div class="form-section">
+
+                <div class="form-section-title">
+                    <span data-i18n="form.contributorSection">Contributor details</span>
+                </div>
+
+                <div class="field">
+
+                    <label>
+                        <span data-i18n="form.contributorName">Contributor name</span>
+                        <span>*</span>
+                    </label>
+
+                    <input
+                        type="text"
+                        id="senderName"
+                        placeholder="e.g. Alex Morgan"
+                        data-i18n-placeholder="form.contributorPlaceholder"
+                        readonly
+                        required
+                    >
+
+                </div>
+
+            </div>
+
+
+            <div class="form-section">
+
+                <div class="form-section-title">
+                    <span data-i18n="form.storySection">Story details</span>
+                </div>
+
+                <div class="field">
+
+                    <label>
+                        <span data-i18n="form.title">Story title</span>
+                        <span>*</span>
+                    </label>
+
+                    <input
+                        type="text"
+                        id="newsTitle"
+                        placeholder="Enter a news title"
+                        data-i18n-placeholder="form.titlePlaceholder"
+                        required
+                    >
+
+                </div>
+
+
+                <div class="form-row">
+
+                    <div class="field">
+
+                        <label>
+                            <span data-i18n="form.category">Category</span>
+                            <span>*</span>
+                        </label>
+
+                        <select id="newsCategory">
+
+                            <option value="Technology" data-i18n="category.Technology">
+                                Technology
+                            </option>
+
+                            <option value="Education" data-i18n="category.Education">
+                                Education
+                            </option>
+
+                            <option value="Social" data-i18n="category.Social">
+                                Social
+                            </option>
+
+                            <option value="Environment" data-i18n="category.Environment">
+                                Environment
+                            </option>
+
+                            <option value="Economy" data-i18n="category.Economy">
+                                Economy
+                            </option>
+
+                            <option value="General" data-i18n="category.General">
+                                General
+                            </option>
+
+                            <option value="Folk Stories" data-i18n="category.Folk Stories">
+                                Folk stories
+                            </option>
+
+                        </select>
+
+                    </div>
+
+
+                    <div class="field">
+
+                        <label>
+                            <span data-i18n="form.source">Source URL</span>
+                            <span>*</span>
+                        </label>
+
+                        <input
+                            type="url"
+                            id="sourceUrl"
+                            placeholder="https://..."
+                            required
+                        >
+
+                    </div>
+
+                </div>
+
+
+                <div class="field">
+
+                    <label>
+                        <span data-i18n="form.content">Story text</span>
+                        <span>*</span>
+                    </label>
+
+                    <textarea
+                        id="newsContent"
+                        rows="9"
+                        placeholder="Write the news story..."
+                        data-i18n-placeholder="form.contentPlaceholder"
+                        required
+                    ></textarea>
+
+                </div>
+
+                <div class="field image-upload-field">
+                    <label for="newsImage">
+                        <span data-i18n="form.image">Story image</span> <span class="optional-label" data-i18n="common.optional">(optional)</span>
+                    </label>
+                    <input
+                        type="file"
+                        id="newsImage"
+                        accept=".jpg,.jpeg,.png,.webp,image/jpeg,image/png,image/webp"
+                        aria-describedby="imageUploadHint"
+                    >
+                    <span class="field-hint" id="imageUploadHint" data-i18n="form.imageHint">JPG, PNG, or WEBP. Maximum 5 MB.</span>
+                    <img id="imagePreview" class="image-preview" alt="Selected story image preview" data-i18n-alt="form.imageAlt" hidden>
+                </div>
+
+            </div>
+
+
+            <div class="form-section">
+
+                <div class="form-section-title">
+                    <span data-i18n="form.logicSection">Logic propositions</span>
+                </div>
+
+                <div class="logic-form-note">
+                    <span data-i18n="form.logicHint">Enter propositions P and Q. PHP generates the logical analysis after an administrator approves the story.</span>
+                </div>
+
+                <div class="premise-grid">
+
+                    <div class="premise-box p-box">
+
+                        <div class="premise-label">
+                            P
+                        </div>
+
+                        <div>
+                            <strong data-i18n="form.premiseP">Premise P</strong>
+
+                            <input
+                                type="text"
+                                id="premiseP"
+                                placeholder="e.g. The government tightens technology regulations"
+                                data-i18n-placeholder="form.premisePPlaceholder"
+                                required
+                            >
+                        </div>
+
+                    </div>
+
+
+                    <div class="premise-box q-box">
+
+                        <div class="premise-label">
+                            Q
+                        </div>
+
+                        <div>
+                            <strong data-i18n="form.premiseQ">Premise Q</strong>
+
+                            <input
+                                type="text"
+                                id="premiseQ"
+                                placeholder="e.g. Technology companies follow the new rules"
+                                data-i18n-placeholder="form.premiseQPlaceholder"
+                                required
+                            >
+                        </div>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+
+            <div class="form-submit-area">
+
+                <button
+                    type="submit"
+                    class="btn btn-primary btn-large">
+                    <span data-i18n="form.submit">Submit for review</span>
+                </button>
+
+                <span>
+                    <span data-i18n="form.reviewNote">Your submission will be reviewed before publication.</span>
+                </span>
+
+            </div>
+
+        </form>
+
+    </div>
+
+</section>
+
+
+
+<!-- =========================
+     ADMIN
+========================= -->
+
+<section id="page-admin" class="page">
+
+    <div class="admin-wrapper">
+
+        <div class="page-header admin-header">
+
+            <div>
+
+                <span class="section-label">
+                    <span data-i18n="admin.eyebrow">EDITORIAL TOOLS</span>
+                </span>
+
+                <h1>
+                    <span data-i18n="admin.title">Review dashboard</span>
+                </h1>
+
+                <p>
+                    <span data-i18n="admin.intro">Review incoming stories and manage what appears on the portal.</span>
+                </p>
+
+            </div>
+
+            <button class="btn btn-secondary"
+                    onclick="loadAdminDashboard()">
+                <span data-i18n="admin.refresh">Refresh submissions</span>
+            </button>
+
+        </div>
+
+
+        <div class="admin-stat-grid">
+
+            <div class="admin-stat">
+                <span data-i18n="admin.total">Total stories</span>
+                <strong id="statTotal">0</strong>
+            </div>
+
+            <div class="admin-stat">
+                <span data-i18n="admin.pending">Pending review</span>
+                <strong id="statPending">0</strong>
+            </div>
+
+            <div class="admin-stat">
+                <span data-i18n="admin.published">Published</span>
+                <strong id="statPublished">0</strong>
+            </div>
+
+            <div class="admin-stat">
+                <span data-i18n="admin.rejected">Rejected</span>
+                <strong id="statRejected">0</strong>
+            </div>
+
+        </div>
+
+
+        <div class="admin-table-wrapper">
+
+            <div class="admin-table-header">
+
+                <h3>
+                    <span data-i18n="admin.submissions">Submissions</span>
+                </h3>
+
+                <div class="admin-filter">
+
+                    <button
+                        class="filter-btn active"
+                        onclick="filterAdmin('all', this)">
+                        <span data-i18n="admin.filterAll">All</span>
+                    </button>
+
+                    <button
+                        class="filter-btn"
+                        onclick="filterAdmin('pending', this)">
+                        <span data-i18n="admin.pending">Pending</span>
+                    </button>
+
+                    <button
+                        class="filter-btn"
+                        onclick="filterAdmin('approved', this)">
+                        <span data-i18n="admin.published">Published</span>
+                    </button>
+
+                    <button
+                        class="filter-btn"
+                        onclick="filterAdmin('rejected', this)">
+                        <span data-i18n="admin.rejected">Rejected</span>
+                    </button>
+
+                </div>
+
+            </div>
+
+
+            <div class="table-scroll">
+
+                <table>
+
+                    <thead>
+
+                        <tr>
+
+                            <th data-i18n="admin.story">Story</th>
+                            <th data-i18n="admin.contributor">Contributor</th>
+                            <th data-i18n="form.category">Category</th>
+                            <th data-i18n="admin.status">Status</th>
+                            <th data-i18n="admin.date">Date</th>
+                            <th data-i18n="admin.actions">Actions</th>
+
+                        </tr>
+
+                    </thead>
+
+                    <tbody id="adminTableBody"></tbody>
+
+                </table>
+
+            </div>
+
+        </div>
+
+    </div>
+
+</section>
+
+
+
+<!-- =========================
+     DETAIL
+========================= -->
+
+<section id="page-detail" class="page">
+
+    <div id="detail-container"></div>
+
+</section>
+
+</main>
+
+
+<div id="auth-modal" class="modal" aria-hidden="true">
+    <div class="modal-backdrop" onclick="closeAuthModal()"></div>
+    <div class="modal-card auth-modal-card" role="dialog" aria-modal="true" aria-labelledby="auth-title">
+        <button class="modal-close" type="button" onclick="closeAuthModal()" aria-label="Close dialog">×</button>
+        <div class="auth-tabs" role="tablist">
+            <button type="button" class="filter-btn active" id="login-tab" onclick="showAuthForm('login')" data-i18n="auth.signIn">Sign in</button>
+            <button type="button" class="filter-btn" id="register-tab" onclick="showAuthForm('register')" data-i18n="auth.register">Create account</button>
+        </div>
+        <h2 id="auth-title" data-i18n="auth.signIn">Sign in</h2>
+        <form id="login-form" class="auth-form">
+            <div class="field">
+                <label for="login-email" data-i18n="auth.email">Email</label>
+                <input id="login-email" type="email" autocomplete="email" required maxlength="190">
+            </div>
+            <div class="field">
+                <label for="login-password" data-i18n="auth.password">Password</label>
+                <input id="login-password" type="password" autocomplete="current-password" required maxlength="72">
+            </div>
+            <button type="submit" class="btn btn-primary" data-i18n="auth.signIn">Sign in</button>
+        </form>
+        <form id="register-form" class="auth-form" hidden>
+            <div class="field">
+                <label for="register-name" data-i18n="auth.name">Name</label>
+                <input id="register-name" type="text" autocomplete="name" required maxlength="120">
+            </div>
+            <div class="field">
+                <label for="register-email" data-i18n="auth.email">Email</label>
+                <input id="register-email" type="email" autocomplete="email" required maxlength="190">
+            </div>
+            <div class="field">
+                <label for="register-password" data-i18n="auth.password">Password</label>
+                <input id="register-password" type="password" autocomplete="new-password" required minlength="10" maxlength="72">
+                <span class="field-hint" data-i18n="auth.passwordHint">Use at least 10 characters.</span>
+            </div>
+            <button type="submit" class="btn btn-primary" data-i18n="auth.register">Create account</button>
+        </form>
+    </div>
+</div>
+
+
+
+<!-- =========================
+     MODAL LOGIC
+========================= -->
+
+<div id="logic-modal" class="modal">
+
+    <div class="modal-backdrop"
+         onclick="closeLogicModal()">
+    </div>
+
+    <div class="modal-card">
+
+        <button
+            class="modal-close"
+            aria-label="Close dialog"
+            data-i18n-aria-label="common.close"
+            onclick="closeLogicModal()">
+            <span class="sr-only" data-i18n="common.close">Close dialog</span>
+            <span aria-hidden="true">×</span>
+        </button>
+
+        <div id="logic-modal-content"></div>
+
+    </div>
+
+</div>
+
+
+
+<!-- =========================
+     TOAST
+========================= -->
+
+<div id="toast" class="toast">
+    <span id="toastMessage"></span>
+</div>
+
+
+<script src="app.js"></script>
+
+</body>
+</html>
